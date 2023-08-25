@@ -1,6 +1,6 @@
-﻿## Contents
+﻿## Table of contents
 
-# PREAMBLE
+## PREAMBLE
 
 The Dvara E-Registry Private Limited relies intensely on information and information systems in the pursuit of its organizational objectives. If vital information were unavailable, unreachable or disclosed to inappropriate persons, the company could suffer loss of reputation or financial damage.
 

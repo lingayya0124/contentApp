@@ -1,6 +1,7 @@
 import { MantineProvider } from "@mantine/core";
-import "./App.css";
+// import "./App.css";
 import { QueryClient, QueryClientProvider } from "react-query";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { useGetContent } from "./useGetContent";
 import Content from "./Content";
 function App() {

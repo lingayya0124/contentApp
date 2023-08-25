@@ -9,100 +9,67 @@ import rehypeRaw from "rehype-raw";
 import { remark } from "remark";
 import remarkParse from "remark-parse";
 import remarkSlug from "remark-slug";
+import collapse from "remark-collapse";
+
 import { unified } from "unified";
 // import "./readme.md";
 import {
   ActionIcon,
   Burger,
+  Button,
   Container,
   Group,
   Menu,
+  Popover,
+  ScrollArea,
   Text,
 } from "@mantine/core";
 import TermsOfUse from "./readme.md";
+import customToc from "./toc";
+import slug from "remark-slug";
+import { toc } from "mdast-util-toc";
+import remarkRehype from "remark-rehype";
+import rehypeToc from "rehype-toc";
+import Toc from "./Toc";
+import CustomMarkdown from "./CustomMarkdown";
+
 function Content() {
   const content = useGetContent();
-  //   console.log(content);
-  const [burgerOpen, setBurgerOpen] = useState(false);
   const [tosText, setTosText] = useState("");
   useEffect(() => {
     fetch(TermsOfUse)
       .then((res) => res.text())
       .then((text) => setTosText(text));
-  });
-  async function main() {
-    const file = await remark()
-      .use(remarkParse)
-      .use(remarkToc, { tight: true })
-      .process(tosText);
-
-    const processor = unified()
-      .use(remarkParse)
-      .use(remarkToc, {
-        // tight: true,
-        // ordered: true,
-        maxDepth: 3,
-        skip: "delta",
-        parents: ["root", "listItem"],
-      });
-
-    const result = processor.processSync(tosText);
-    //   setTocHtml(result.contents);
-    console.log(result);
-  }
-  useEffect(() => {
-    main();
   }, []);
+
+  useEffect(() => {
+    async function generateTOC() {
+      const file = await remark()
+        .use(remarkRehype)
+        .use(customToc, {
+          tight: true,
+          ordered: true,
+
+          maxDepth: 5,
+          // skip: "delta",
+          parents: ["root", "listItem"],
+          //   prefix: "user-content-",
+        })
+        .process(tosText);
+
+      console.log(String(file));
+    }
+
+    generateTOC();
+  }, []);
+  console.log(tosText);
   return (
     <Container>
       <Group>
-        <Menu shadow="md" width={200}>
-          <Menu.Target>
-            <Burger opened={burgerOpen}></Burger>
-          </Menu.Target>
-
-          <Menu.Dropdown>
-            <Menu.Label>Application</Menu.Label>
-
-            <Menu.Item
-            // icon={<IconSearch size={14} />}
-            >
-              {/* <div
-              className="toc"
-              dangerouslySetInnerHTML={{
-                __html: processor.stringify(markdownAST.toc),
-              }}
-            /> */}
-            </Menu.Item>
-
-            <Menu.Divider />
-
-            <Menu.Label>Danger zone</Menu.Label>
-          </Menu.Dropdown>
-        </Menu>
-
-        <Text align="left">
-          <ReactMarkdown
-            // rehypePlugins={[rehypeRaw]}
-            children={tosText}
-            remarkPlugins={[
-              //   remarkGfm,
-              remarkSlug,
-              [
-                remarkToc,
-                {
-                  tight: true,
-                  ordered: true,
-                  heading: "contents",
-                  maxDepth: 3,
-                  skip: "delta",
-                  parents: ["root", "listItem"],
-                  //   prefix: "user-content-",
-                },
-              ],
-            ]}
-          />
-        </Text>
+        <Toc content={tosText} />
+        <CustomMarkdown
+          content={tosText.replace(/## Table of contents/g, "")}
+        />
       </Group>
     </Container>
   );
