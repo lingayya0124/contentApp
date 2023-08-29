@@ -41,6 +41,8 @@
     "@tiptap/react": "^2.1.0",
     "@tiptap/starter-kit": "^2.1.0",
     "axios": "^1.4.0",
+    "debounce": "^1.2.1",
+    "lodash": "^4.17.21",
     "markdown-loader": "^8.0.0",
     "mdast-util-to-string": "^4.0.0",
     "mdast-util-toc": "^7.0.0",
