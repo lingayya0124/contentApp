@@ -53,6 +53,9 @@ dependencies:
   markdown-loader:
     specifier: ^8.0.0
     version: 8.0.0(webpack@5.88.2)
+  mdast-util-to-string:
+    specifier: ^4.0.0
+    version: 4.0.0
   mdast-util-toc:
     specifier: ^7.0.0
     version: 7.0.0

@@ -10,16 +10,19 @@ import { remark } from "remark";
 import remarkParse from "remark-parse";
 import remarkSlug from "remark-slug";
 import collapse from "remark-collapse";
-
+import { IconList } from "@tabler/icons-react";
 import { unified } from "unified";
 // import "./readme.md";
 import {
   ActionIcon,
+  Badge,
+  Box,
   Burger,
   Button,
   Container,
   Group,
   Menu,
+  Paper,
   Popover,
   ScrollArea,
   Text,
@@ -35,7 +38,11 @@ import rehypeToc from "rehype-toc";
 
 function Toc(props) {
   const [opened, setOpened] = useState(false);
+  const [search, setSearch] = useState("");
   const { content } = props;
+  useEffect(() => {
+    setSearch("");
+  }, [opened]);
   return (
     <Popover
       // styles={{
@@ -51,45 +58,57 @@ function Toc(props) {
       onChange={setOpened}
       width={400}
       position="bottom-start"
-      withArrow
+      // withArrow
       shadow="md"
     >
       <Popover.Target>
         <ActionIcon>
-          <Burger opened={opened} onClick={() => setOpened((o) => !o)} />
+          <IconList
+            size={25}
+            onClick={() => {
+              setOpened(!opened);
+            }}
+          ></IconList>
         </ActionIcon>
       </Popover.Target>
       <Popover.Dropdown>
-        {/* <TextInput placeholder="Filter Headings" /> */}
-        <ScrollArea.Autosize
-          ml={0}
-          className="toc"
-          mah={300}
-          maw={400}
-          mx="auto"
-        >
-          <Group>
-            <ReactMarkdown
-              children={content}
-              remarkPlugins={[
-                remarkGfm,
-                remarkSlug,
-                [
-                  customToc,
-                  {
-                    tight: true,
-                    // ordered: true,
-                    filterValue: "sfsdfsd",
-                    maxDepth: 5,
-                    // skip: "delta",
-                    parents: ["root", "listItem"],
-                    //   prefix: "user-content-",
-                  },
-                ],
-              ]}
-            />
-          </Group>
-        </ScrollArea.Autosize>
+        <Paper shadow="sm" radius="md" p="md" withBorder>
+          <TextInput
+            value={search}
+            onChange={(event) => setSearch(event.currentTarget.value)}
+            placeholder="Filter Headings"
+          />
+          <ScrollArea.Autosize
+            ml={0}
+            className="toc"
+            mah={300}
+            maw={400}
+            mx="auto"
+          >
+            <Group>
+              <ReactMarkdown
+                children={content}
+                remarkPlugins={[
+                  remarkGfm,
+                  remarkSlug,
+                  [
+                    customToc,
+                    {
+                      tight: true,
+                      // ordered: true,
+                      // filterValue: "sfsdfsd",
+                      expression: search,
+                      maxDepth: 5,
+                      // skip: "delta",
+                      parents: ["root", "listItem"],
+                      //   prefix: "user-content-",
+                    },
+                  ],
+                ]}
+              />
+            </Group>
+          </ScrollArea.Autosize>
+        </Paper>
       </Popover.Dropdown>
     </Popover>
   );

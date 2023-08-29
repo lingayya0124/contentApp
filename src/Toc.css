@@ -46,8 +46,8 @@
   .toc {
     margin-left: 0;
   }
- .toc a.active {
-    background-color: blue;
+ .toc a:active {
+    background:#0969da;
   }
   .toc > li {
     border-bottom: 1px solid #ccc;
